@@ -23,7 +23,7 @@ LATEST_AMI=$(aws ssm get-parameter --name "/aws/service/ami-amazon-linux-latest/
 aws ec2 run-instances \
     --image-id $LATEST_AMI \
     --instance-type t2.micro \
-    --key-name hilda-devops-18-key \
+    --key-name tasha-clarusway-keypair
     --security-groups RomanNumsSecurityGroup \
     --user-data file:///home/ec2-user/user_data.sh
 
