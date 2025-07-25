@@ -1,0 +1,29 @@
+GITaws ec2 create-security-group --group-name RomanNumsSecurityGroup --description "Open HTTP port 80, open SSH, open port 8080"
+
+aws ec2 authorize-security-group-ingress \
+    --group-name RomanNumsSecurityGroup \
+    --protocol tcp \
+    --port 22 \
+    --cidr 0.0.0.0/0
+
+aws ec2 authorize-security-group-ingress \
+    --group-name RomanNumsSecurityGroup \
+    --protocol tcp \
+    --port 80 \
+    --cidr 0.0.0.0/0
+
+aws ec2 authorize-security-group-ingress \
+    --group-name RomanNumsSecurityGroup \
+    --protocol tcp \
+    --port 8080 \
+    --cidr 0.0.0.0/0
+
+LATEST_AMI=$(aws ssm get-parameter --name "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-6.1-x86_64" --query "Parameter.Value" --output text)
+
+aws ec2 run-instances \
+    --image-id $LATEST_AMI \
+    --instance-type t2.micro \
+    --key-name hilda-devops-18-key \
+    --security-groups RomanNumsSecurityGroup \
+    --user-data file:///home/ec2-user/user_data.sh
+
